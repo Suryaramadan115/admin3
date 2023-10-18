@@ -1,0 +1,98 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model Siswa {
+  id  String     @id @default(auto()) @map("_id") @db.ObjectId
+  nisn String @unique
+  nama String
+  kelas  Int
+  datasiswa Datasiswa[]
+  nilaisiswa Nilaisiswa[]
+
+   @@map("siswa")
+
+  
+}
+
+model Jurusan {
+  id String      @id @default(auto()) @map("_id") @db.ObjectId
+  namajurusan String
+  datasiswa Datasiswa[]
+ @@map("jurusan")
+
+
+}
+
+model Alamat {
+  id  String    @id @default(auto()) @map("_id") @db.ObjectId
+  kampung String 
+  desa String
+  kecamatan String
+  kabupaten String
+  post Int
+  datasiswa Datasiswa[]
+   @@map("alamat")
+
+
+}
+
+model Mapel {
+ id String     @id @default(auto()) @map("_id") @db.ObjectId
+ ipa Int
+ ips Int
+ matematika Int
+ indonesia Int
+ kimia Int
+ fisika Int
+ inggris Int
+
+nilaisiswa Nilaisiswa[]
+
+ @@map("mapel")
+
+
+
+
+}
+
+model Datasiswa {
+ id String  @id @default(auto()) @map("_id") @db.ObjectId
+ siswa Siswa @relation(references: [id],fields: [siswaid],onDelete: Cascade,onUpdate: Cascade)
+ siswaid String @db.ObjectId
+ 
+ alamat Alamat @relation(references: [id],fields: [alamatid],onDelete: Cascade,onUpdate: Cascade)
+ alamatid String @db.ObjectId
+
+ jurusan Jurusan @relation(references: [id],fields: [jurusanid], onDelete:Cascade,onUpdate: Cascade)
+ jurusanid String @db.ObjectId
+
+@@map("datasiswa")
+
+
+}
+
+model Nilaisiswa {
+
+  id String  @id @default(auto()) @map("_id") @db.ObjectId
+  siswa Siswa? @relation(references: [id],fields: [siswaid], onDelete:Cascade ,onUpdate: Cascade)
+  siswaid String @db.ObjectId
+  mapel Mapel @relation(references: [id],fields: [mapelid],onDelete: Cascade,onUpdate: Cascade)
+  mapelid String @db.ObjectId
+   
+
+   @@map("nilaisiswa")
+   @@unique([siswaid])
+
+
+
+}
+
