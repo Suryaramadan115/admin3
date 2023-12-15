@@ -6,12 +6,12 @@ generator client {
 }
 
 datasource db {
-  provider = "mongodb"
+  provider = "mysql"
   url      = env("DATABASE_URL")
 }
 
 model Siswa {
-  id  String     @id @default(auto()) @map("_id") @db.ObjectId
+  id  Int    @id @default(autoincrement())
   nisn String @unique
   nama String
   kelas  Int
@@ -24,7 +24,7 @@ model Siswa {
 }
 
 model Jurusan {
-  id String      @id @default(auto()) @map("_id") @db.ObjectId
+  id Int     @id @default(autoincrement())
   namajurusan String
   datasiswa Datasiswa[]
  @@map("jurusan")
@@ -33,7 +33,7 @@ model Jurusan {
 }
 
 model Alamat {
-  id  String    @id @default(auto()) @map("_id") @db.ObjectId
+  id  Int @id  @default(autoincrement())
   kampung String 
   desa String
   kecamatan String
@@ -46,7 +46,7 @@ model Alamat {
 }
 
 model Mapel {
- id String     @id @default(auto()) @map("_id") @db.ObjectId
+ id Int     @id @default(autoincrement())
  ipa Int
  ips Int
  matematika Int
@@ -65,15 +65,15 @@ nilaisiswa Nilaisiswa[]
 }
 
 model Datasiswa {
- id String  @id @default(auto()) @map("_id") @db.ObjectId
+ id Int @id @default(autoincrement())
  siswa Siswa @relation(references: [id],fields: [siswaid],onDelete: Cascade,onUpdate: Cascade)
- siswaid String @db.ObjectId
+ siswaid Int
  
  alamat Alamat @relation(references: [id],fields: [alamatid],onDelete: Cascade,onUpdate: Cascade)
- alamatid String @db.ObjectId
+ alamatid Int
 
  jurusan Jurusan @relation(references: [id],fields: [jurusanid], onDelete:Cascade,onUpdate: Cascade)
- jurusanid String @db.ObjectId
+ jurusanid Int
 
 @@map("datasiswa")
 
@@ -82,11 +82,11 @@ model Datasiswa {
 
 model Nilaisiswa {
 
-  id String  @id @default(auto()) @map("_id") @db.ObjectId
+  id Int @id @default(autoincrement())
   siswa Siswa? @relation(references: [id],fields: [siswaid], onDelete:Cascade ,onUpdate: Cascade)
-  siswaid String @db.ObjectId
+  siswaid Int
   mapel Mapel @relation(references: [id],fields: [mapelid],onDelete: Cascade,onUpdate: Cascade)
-  mapelid String @db.ObjectId
+  mapelid Int
    
 
    @@map("nilaisiswa")
